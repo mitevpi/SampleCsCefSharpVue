@@ -80,7 +80,14 @@ namespace SampleCsCefSharpVue
         {
 #if DEBUG
             //use localhost
-            Browser = new ChromiumWebBrowser(@"http://localhost:8080/");
+            Browser = new ChromiumWebBrowser(@"http://localhost:8080/")
+            {
+                BrowserSettings = new BrowserSettings
+                {
+                    FileAccessFromFileUrls = CefState.Enabled, UniversalAccessFromFileUrls = CefState.Enabled
+                },
+                Dock = System.Windows.Forms.DockStyle.Fill
+            };
 #else
             //use app files
 
@@ -100,13 +107,7 @@ namespace SampleCsCefSharpVue
             index = indexPath;
 #endif
             // Allow the use of local resources in the browser
-            Browser.BrowserSettings = new BrowserSettings
-            {
-                FileAccessFromFileUrls = CefState.Enabled,
-                UniversalAccessFromFileUrls = CefState.Enabled
-            };
 
-            Browser.Dock = System.Windows.Forms.DockStyle.Fill;
         }
 
         private void InitializeCef()
