@@ -11,7 +11,6 @@ namespace SampleCsCefSharpVue
         public SampleCsCefSharpInterop(ChromiumWebBrowser browser)
         {
             Browser = browser;
-     
         }
 
         #region To UI (Generic)

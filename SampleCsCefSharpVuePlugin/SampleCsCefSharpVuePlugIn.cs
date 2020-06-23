@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using CefSharp;
@@ -27,10 +28,7 @@ namespace SampleCsCefSharpVue
         }
 
         ///<summary>Gets the only instance of the SampleCsChromiumVuePlugIn plug-in.</summary>
-        public static SampleCsCefSharpVuePlugIn Instance
-        {
-            get; private set;
-        }
+        public static SampleCsCefSharpVuePlugIn Instance { get; private set; }
 
         /// <summary>
         /// The tabbed dockbar user control
@@ -43,7 +41,10 @@ namespace SampleCsCefSharpVue
 
         protected override LoadReturnCode OnLoad(ref string errorMessage)
         {
-            Panels.RegisterPanel(this, typeof(SampleCsCefSharpVuePanel), "SampleCsCefSharpVue", SampleCsCefSharpVue.Properties.Resources.icon);
+            CheckCefDependencies();
+
+            Panels.RegisterPanel(this, typeof(SampleCsCefSharpVuePanel), "SampleCsCefSharpVue",
+                SampleCsCefSharpVue.Properties.Resources.icon);
 
             if (!Cef.IsInitialized)
                 InitializeCef();
@@ -74,6 +75,17 @@ namespace SampleCsCefSharpVue
                 Browser.ShowDevTools();
 
             Interop.AddText("Hello World!");
+        }
+
+        private void CheckCefDependencies()
+        {
+            string dir = AppDomain.CurrentDomain.BaseDirectory;
+            List<string> missingDeps = CefSharp.DependencyChecker.CheckDependencies(true, false, dir, string.Empty,
+                Path.Combine(dir, "CefSharp.BrowserSubprocess.exe"));
+            if (missingDeps?.Count > 0)
+                throw new InvalidOperationException("Missing components:\r\n  " + string.Join("\r\n  ", missingDeps));
+            // ReSharper disable once UnusedVariable
+            ChromiumWebBrowser browser = new ChromiumWebBrowser(); //test, if browser can be instantiated
         }
 
         private void InitializeCefSharp()
@@ -107,7 +119,6 @@ namespace SampleCsCefSharpVue
             index = indexPath;
 #endif
             // Allow the use of local resources in the browser
-
         }
 
         private void InitializeCef()
@@ -123,7 +134,6 @@ namespace SampleCsCefSharpVue
                 LogSeverity = LogSeverity.Verbose,
                 LogFile = "ceflog.txt",
                 BrowserSubprocessPath = pathSubprocess,
-
             };
 
             settings.CefCommandLineArgs.Add("allow-file-access-from-files", "1");
