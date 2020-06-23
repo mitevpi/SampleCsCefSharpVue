@@ -113,11 +113,11 @@ namespace SampleCsCefSharpVue
         {
             Cef.EnableHighDPISupport();
 
-            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-            var assemblyPath = Path.GetDirectoryName(assemblyLocation);
-            var pathSubprocess = Path.Combine(assemblyPath, "CefSharp.BrowserSubprocess.exe");
+            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            string assemblyPath = Path.GetDirectoryName(assemblyLocation);
+            string pathSubprocess = Path.Combine(assemblyPath, "CefSharp.BrowserSubprocess.exe");
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
-            var settings = new CefSettings
+            CefSettings settings = new CefSettings
             {
                 LogSeverity = LogSeverity.Verbose,
                 LogFile = "ceflog.txt",

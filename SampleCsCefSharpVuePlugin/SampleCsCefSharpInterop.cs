@@ -19,14 +19,14 @@ namespace SampleCsCefSharpVue
         public void NotifyFrame(string eventType, string eventInfo)
         {
 
-            var script = string.Format("window.EventBus.$emit('{0}', '{1}')", eventType, eventInfo);
+            string script = $"window.EventBus.$emit('{eventType}', '{eventInfo}')";
             try
             {
                 Browser.GetMainFrame().EvaluateScriptAsync(script);
             }
             catch
             {
-                Debug.WriteLine("For some reason, this browser was not initialised.");
+                Debug.WriteLine("For some reason, this browser was not initialized.");
             }
         }
         #endregion
@@ -42,10 +42,10 @@ namespace SampleCsCefSharpVue
 
         #region From UI
 
-        public void doSomething(dynamic args)
+        public void DoSomething(dynamic args)
         {
-            var location = new Point3d(args.location[0], args.location[1], args.location[2]);
-            var sphere = new Sphere(location, args.radius);
+            Point3d location = new Point3d(args.location[0], args.location[1], args.location[2]);
+            Sphere sphere = new Sphere(location, args.radius);
             Rhino.RhinoDoc.ActiveDoc.Objects.AddSphere(sphere);
             Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
         }
